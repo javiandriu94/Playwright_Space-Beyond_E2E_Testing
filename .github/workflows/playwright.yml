@@ -1,4 +1,4 @@
-name: Cucumber Playwright Tests
+name: Playwright & Cucumber Tests
 on:
   push:
     branches: [ main, master ]
@@ -10,47 +10,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
+    - uses: actions/setup-node@v4
       with:
-        node-version: 'lts/*'
-        cache: 'npm'
-        
+        node-version: lts/*
     - name: Install dependencies
       run: npm ci
-        
-    - name: Install Playwright
-      run: |
-        npx playwright install --with-deps chromium
-        npx playwright install-deps
-      
-    - name: Create test directories
-      run: mkdir -p test-results
-      
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps
     - name: Run Cucumber E2E tests
-      run: npm run test:cucumber -- --profile ci
-      env:
-        CI: true
-        PLAYWRIGHT_HEADLESS: true
-        DEBUG: pw:api
-        
-    - name: Upload test results
-      if: always()
-      uses: actions/upload-artifact@v4
+      run: npm run test:cucumber
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
       with:
-        name: test-results
-        path: |
-          test-results/
-          playwright-report/
-          test-results/cucumber-report.json
-          test-results/cucumber-report.html
+        name: playwright-report
+        path: playwright-report/
         retention-days: 30
-
-    - name: Upload Playwright traces
-      if: failure()
-      uses: actions/upload-artifact@v4
-      with:
-        name: playwright-traces
-        path: test-results/traces/
-        retention-days: 5
