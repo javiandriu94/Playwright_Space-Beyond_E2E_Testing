@@ -12,15 +12,15 @@ export class CustomWorld extends World {
 
   async init() {
     this.browser = await chromium.launch({
-      headless: false,   // Mostrar navegador
-      slowMo: 2000       // Retraso entre acciones (200ms recomendado)
+      headless: true,   
+      slowMo: 200       
     });
 
     this.context = await this.browser.newContext();
     this.page = await this.context.newPage();
 
-    // Timeout global para todas las acciones (10s)
-    this.page.setDefaultTimeout(10000);
+    // Timeout global para todas las acciones (30s)
+    this.page.setDefaultTimeout(30000);
   }
 
   async cleanup() {

@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test:cucumber": "cucumber-js --require-module ts-node/register --require tests/support/world.ts --require tests/support/hooks.ts  --require tests/support/step_definitions/**/*.ts tests/features/**/*.feature"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/javiandriu94/Playwright_Space-Beyond_E2E_Testing.git"
